@@ -64,13 +64,15 @@ Vagrant.configure("2") do |config|
   # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-  
-  ls -la | grep "\->"
-   sed -n '/^Character/, /^$/ { /^$/ !p }' /proc/devices
-   sed -n '/^Block/, /^$/ { /^$/ !p }' /proc/devices
-   find / -type d -perm -1000 -exec ls -ld {} \;
+ 
+   find / -type l
+   find / -type b -or -type c | wc -l
+   find / -type d -perm -1000
+   ln -s /etc/hostname /tmp/softlink
    sudo ln -sf tmp/file  /etc/hostname
    sudo useradd testuser
    sudo  touch /home/testuser/testuser_data && sudo chown testuser:testuser /ho>
    SHELL
+
 end
+
